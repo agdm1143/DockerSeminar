@@ -1,0 +1,45 @@
+■■■ mysql ■■■
+
+-- 接続
+mysql -u root -p
+
+-- DB作成
+create database testdb character set utf8;
+
+-- 権限追加
+grant select, insert, update, delete on testdb.* to test@'%' identified by 'test';
+
+-- テーブル作成
+create table testdb.member(id int, name nvarchar(200));
+
+-- データインサート
+insert into testdb.member values(1, 'test1-mysql');
+insert into testdb.member values(2, 'test2-mysql');
+insert into testdb.member values(3, 'test3-mysql');
+
+■■■ postgress ■■■
+
+-- 接続
+psql -h localhost -U root
+
+-- DB作成
+create database "testdb" encoding 'utf-8' template template0;
+
+-- ユーザ作成
+create role test with login password 'test';
+
+-- DB選択
+\c testdb
+
+-- テーブル作成
+create table member(id int, name varchar(200));
+
+-- 権限追加
+grant all on all tables in schema public to test;
+
+-- データインサート
+insert into member values(1, 'test1-postgree');
+insert into member values(2, 'test2-postgree');
+insert into member values(3, 'test3-postgree');
+
+
