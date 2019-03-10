@@ -1,0 +1,160 @@
+スライドの中のコマンドの抜粋
+
+# Dockerインストール確認
+$ docker version
+
+# hello-worldコンテナ実行
+$ docker run hello-world
+
+＃ docker-slコンテナ実行
+$ docker run -t yuntumg/docker-sl:ver1 /usr/games/sl
+
+# hellomit-javaコンテナ実行
+$ docker run yuntumg/hellomit-java:Ver1
+
+# whalesayコンテナ実行
+$ docker run docker/whalesay cowsay hello
+
+# イメージ一覧表示
+$ docker images
+
+# イメージのタグつけ
+$ docker tag docker/whalesay:latest my_whalesay
+
+# イメージ詳細表示
+$ docker inspect my_whalesay
+
+# イメージを削除 $ docker rmi my_whalesay
+
+# イメージ強制削除 $ docker rmi -f my_whalesay
+
+# イメージ取得
+$ docker pull docker/whalesay
+
+# イメージビルド
+$ docker build -t my-whale .
+
+# イメージの変更履歴
+$ docker image history my-whale
+
+# 自作イメージからコンテナを実行
+$ docker run my-whale
+
+# イメージビルド（キャッシュ使わない）
+$ docker build  --no-cache -t my-whale .
+
+# Docker Hubログイン
+$ docker login
+
+# イメージ公開前のタグつけ
+$ docker tag my-whale yuntumg/my-whale:ver1
+
+# イメージ公開
+$ docker push yuntumg/my-whale:ver1
+
+# nginxコンテナ実行
+$ docker run --name  my-nginx -d -p 8080:80 nginx
+
+# バインドマウントでNginxコンテナ実行
+$ docker run --name my-nginx-html -d -p 8080:80 -v /Users/oyont/Docker/nginx-html:/usr/share/nginx/html:ro nginx
+
+# コンテナライフサイクル
+$ docker create --name status -it alpine /bin/sh
+$ docker start status
+$ docker inspect status
+$ docker pause status
+$ docker unpause status
+$ docker stop status
+
+# コンテナに接続
+$ docker run --name my-ubuntu  -it -d ubuntu /bin/bash
+$ docker exec -it my-ubuntu /bin/bash
+
+# DBコンテナ構築(mysql)
+$ docker run  --name my-mysql-db  -p 3306:3306  -e MYSQL_ROOT_PASSWORD=root  -d mysql:5.5
+$ docker exec -it my-mysql-db bash
+
+# DBコンテナ構築(postgree)
+$ docker run  --name my-postgress-db  -p 5432:5432  -e POSTGRES_USER=root  -e POSTGRES_PASSWORD=root  -d postgres:9.6
+$ docker exec -it my-postgress-db bash
+
+# Dockerネットワーク
+
+# 仮想マシン作成
+$ docker-machine create network-test
+
+# 仮想マシンに ssh ログイン
+$ docker-machine ssh network-test
+
+# ネットワークい一覧表示
+$ docker network ls
+
+# ネットワークい詳細表示
+$ docker network inspect bridge
+
+# ネットワーク接続確認
+$ docker run -itd --name alpine alpine /bin/sh
+$ docker network inspect bridge
+
+$ docker run -itd --name alpine2 alpine /bin/sh
+$ docker exec  -it  alpine2 /bin/sh
+/ # ping -c 3 172.17.0.3
+/ # ping -c 3 alpine
+
+# ユーザ定義ネットワーク作成
+$ docker network create my-network
+$ docker network ls
+
+# ユーザ定義ネットワークに接続
+$ docker network connect my-network alpine
+$ docker network connect my-network alpine2
+$ docker exec  -it  alpine2 /bin/sh
+/ # ping alpine
+
+# noneネットワークに接続
+$ docker run -itd --name none-network  --network none alpine /bin/sh
+$ docker exec  -it none-network /bin/sh
+/ # ip addr show
+
+# ホストネットワーク接続確認
+$ docker-machine ip network-test
+$ docker-machine ssh network-test
+$ docker run -d --name mywebservice --network host nginx
+
+# データボリューム確認
+$ docker-machine create vol-test
+$ docker-machine ssh vol-test 
+docker@vol-test:~$
+
+# ボリューム作成・確認・削除
+$ docker volume  create my-vol $ docker volume ls $ docker volume inspect my-vol
+$ docker volume rm my-vol
+
+# ボリュームマウント
+$ docker run -itd --name mount-test1 --mount source=my-vol,target=/app nginx $ docker inspect mount-test1
+$ docker exec -it mount-test1 /bin/bash
+root@eccce8d194b0:/# df
+
+$ echo  "test by yuntumg." >  /app/testfile
+$ docker run -itd --name mount-test2 --mount source=my-vol,target=/app nginx
+$ docker exec -it mount-test2 /bin/bash
+
+$ docker run -itd --name mount-test3 --mount source=my-vol2,target=/etc/nginx nginx
+$ docker volume inspect my-vol2
+$ sudo ls /mnt/sda1/var/lib/docker/volumes/my-vol2/_data
+
+# バインドマウント
+$ docker run -itd --name bind-test --mount type=bind,source="$(pwd)"/bindmount-test,target=/app nginx
+$ echo "xxxxxxxx" > bindmount-test/yyyyyyyy
+$ docker exec  -it bind-test /bin/bash
+root@e3db6d08380c:/# cat /app/yyyyyyyy
+
+# tmpfsマウント
+$ docker run -itd --name tmpfs-test --mount type=tmpfs,target=/app nginx
+$ docker inspect tmpfs-test
+
+# docker compose
+$ mkdir  wp $ cd wp/ $ vi docker-compose.yml
+$ docker-compose up -d
+$ docker ps
+$ docker-compose down
