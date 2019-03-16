@@ -32,3 +32,10 @@ postgresql-42.2.5.jar
 docker-compose.yml
 　　docker composeで wordpree、MySQLのコンテナを起動するための設定ファイル。
 </pre>
+
+<pre>
+　　　　windows
+　　　　　　https://hub.docker.com/editions/community/docker-ce-desktop-windows
+　　　　Mac
+　　　　　　https://hub.docker.com/editions/community/docker-ce-desktop-mac
+</pre>
