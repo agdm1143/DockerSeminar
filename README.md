@@ -34,8 +34,9 @@ docker-compose.yml
 </pre>
 
 <pre>
-　　　　windows
-　　　　　　https://hub.docker.com/editions/community/docker-ce-desktop-windows
-　　　　Mac
-　　　　　　https://hub.docker.com/editions/community/docker-ce-desktop-mac
+ダウンロード先
+　　windows
+　　　　https://hub.docker.com/editions/community/docker-ce-desktop-windows
+　　Mac
+　　　　https://hub.docker.com/editions/community/docker-ce-desktop-mac
 </pre>
